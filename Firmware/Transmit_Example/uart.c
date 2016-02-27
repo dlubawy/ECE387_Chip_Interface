@@ -8,8 +8,6 @@
 
 static FILE g_uart_stream = {0};
 
-static char line[256];
-
 static void uart_init( uint32_t baud )
 {
     /* See table 20-1 for baud rate calculations */

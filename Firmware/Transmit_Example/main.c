@@ -72,7 +72,7 @@ unsigned char tx_buf[17] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38
 
 int main(void)
 {
-	char temp, inkey;
+	char temp;
 	unsigned char i;
 
 	ioinit();

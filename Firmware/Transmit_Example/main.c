@@ -20,7 +20,7 @@
 		SCK		|	PB4 (D13)  |	PB4 (D12)
 		SDI		|	PB2 (D11)  |	PB2 (D10)
 		SDO		|	PB3 (D12)  |	PB3 (D11)
-		
+
 	Antenna is a 17cm piece of wire sticking straight up into the air.
 */
 
@@ -29,6 +29,7 @@
 #include <avr/io.h>
 #include <stdio.h>
 #include "RFM22.h"
+#include "uart.h"
 //======================//
 //======================//
 
@@ -55,13 +56,6 @@ void delay_us(uint16_t x);
 //======================//
 //======================//
 
-static int uart_putchar(char c, FILE *stream);
-uint8_t uart_getchar(void);
-static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
-
-//======================//
-//======================//
-
 void init_SPI(void);
 void init_RFM22(void);
 void to_tx_mode(void);
@@ -84,7 +78,7 @@ int main(void)
 	ioinit();
 	init_SPI();
 	sbi(PORTB,CS);
-	printf("/n/n********RFM22 Communication Test********\n");
+	uart_print("********RFM22 Communication Test********\0");
 
 	//====================//
 	//Communications Test
@@ -96,7 +90,7 @@ int main(void)
 	temp = read(OMFC1);
 	temp = read(OMFC2);
 	
-	printf("*****************************************\n\n");
+	uart_print("*****************************************\0");
 	
 	init_RFM22();	// Initialize all RFM22 registers
 	to_tx_mode();	// Send test packet	'0123456789:;<=>?"
@@ -105,23 +99,23 @@ int main(void)
 	while(1)
 	{
 		to_tx_mode();
-		printf("Transmit Done\n");
+		uart_print("Transmit Done\0");
 		delay_ms(1000);
 	}
 	*/
 	
 	// This example allows you to enter a 16-byte packet to send
-	printf("Entering TX Mode...Give me a 16-byte packet\n\n");
+	uart_print("Entering TX Mode...Give me a 16-byte packet\0");
 	while(1)
 	{
 		
 		get_packet();
-		printf("Transmitting: ");
+		uart_print("Transmitting: ");
 		for (i=0; i<17; i++)
-			printf("%c", tx_buf[i]);
-		printf("\n");
+			uart_print("%c", tx_buf[i]);
+		uart_print("\n");
 		to_tx_mode();
-		printf("Transmit done...Press any key to transmit again\n\n");
+		uart_print("Transmit done...Press any key to transmit again\0");
 	}
 	
 	/*
@@ -139,14 +133,14 @@ int main(void)
 		chksum += tx_buf[i];
 	
 	tx_buf[16] = chksum;
-	printf("chksum == %x\r", tx_buf[16]);
+	uart_print("chksum == %x\r", tx_buf[16]);
 	
 	while(1)
 	{
 		to_tx_mode();
 		delay_ms(1000);
 		
-		printf("Transmission Complete...%d\n", count);
+		uart_print("Transmission Complete...%d\0", count);
 		count++;
 		
 	}*/
@@ -285,8 +279,8 @@ void get_packet(void)
 	
 	for(i=0; i<16; i++)
 	{
-		tx_buf[i] = uart_getchar();
-		printf("Received %c, %d characters remaining for packet\n", tx_buf[i], 15-i);
+		uart_receivec(tx_buf, i);
+		uart_print("Received %c, %i characters remaining for packet\0", tx_buf[i], 15-i);
 	}
 	
 	chksum = 0;
@@ -299,9 +293,9 @@ void get_packet(void)
 void checkINT(void)
 {
 	if ((PIND & (1<<NIRQ)) == 0)
-		printf("INT == 0\n");
+		uart_print("INT == 0\0");
 	else
-		printf("INT == 1\n");
+		uart_print("INT == 1\0");
 }
 
 void write(uint8_t address, char data)
@@ -363,30 +357,12 @@ void init_SPI(void)
 	SPCR |= 0b01010011;		// Fosc/128
 }
 
-static int uart_putchar(char c, FILE *stream)
-{
-    if (c == '\n') uart_putchar('\r', stream);
-
-    loop_until_bit_is_set(UCSR0A, UDRE0);
-    UDR0 = c;
-
-    return 0;
-}
-
-uint8_t uart_getchar(void)
-{
-    while( !(UCSR0A & (1<<RXC0)) );
-    return(UDR0);
-}
-
-
 void ioinit (void)
 {
     //1 = output, 0 = input
     DDRB = 0b11101111; //MISO input
     DDRC = 0b11111111; //All outputs
     DDRD = 0b11101110; //PORTD (RX on PD0), PD4 input
-	stdout = &mystdout; //Required for printf init
 	int MYUBRR = 103;
 	UBRR0H = (MYUBRR) >> 8;
 	UBRR0L = MYUBRR;

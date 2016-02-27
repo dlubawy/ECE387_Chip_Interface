@@ -73,7 +73,7 @@ FORMAT = ihex
 TARGET = main
 
 #For later use
-#DEPS = uart
+DEPS = uart
 
 # Object files directory
 #     To put object files in current directory, use a dot (.), do NOT make
@@ -82,7 +82,7 @@ OBJDIR = .
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c $(DEPS)
+SRC = $(TARGET).c $(DEPS).c
 #SRC += LCD_driver.c
 
 

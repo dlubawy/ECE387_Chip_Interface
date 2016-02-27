@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
+#include <stdarg.h>
 #include "uart.h"
 
 static FILE g_uart_stream = {0};
@@ -42,7 +44,7 @@ static int uart_putc( char c, FILE* stream )
 }
 
 
-int ioinit( void )
+int uart_ioinit( void )
 {
     DDRB |= _BV(5);
     uart_init( 9600 );
@@ -53,10 +55,32 @@ int ioinit( void )
     return 0;
 }
 
-int uart_print(char *argv)
+int uart_print(const char *format, ...)
 {
-    ioinit();
-    fputs(argv, stdout);
+    uart_ioinit();
+    va_list args;
+    va_start (args, format);
+    vprintf (format, args);
+    fputs("\n\0", stdout);
+    va_end (args);
     fflush(stdout);
+    //fputs(format, stdout);
+    //fflush(stdout);
+    return 0;
+}
+
+int uart_receiveln(char *buff, size_t sz)
+{
+    uart_ioinit();
+    fgets(buff, sz, stdin);
+    return 0;
+}
+
+int uart_receivec(char line[], int i)
+{
+    int c;
+    uart_ioinit();
+    c = getchar();
+    line[i] = (char)c;
     return 0;
 }

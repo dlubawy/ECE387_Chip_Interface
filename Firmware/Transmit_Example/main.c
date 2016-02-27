@@ -6,20 +6,20 @@
 	
 	Hardware: Arduino Pro (ATmega328) running at 8Mhz, 3.3V
 	Wiring:
-	RFM22 BOB	|	Arduino Pro
-	----------------------------
-		GND		|	GND
-		3.3V	|	3.3V
-		GPIO0	|	NC
-		GPIO1	|	NC
-		GPIO2	|	NC
-		RXANT	|	PD6 (D6)
-		TXANT	|	PD5 (D5)
-		IRQ		|	PD4 (D4)
-		CSN		|	PB0 (D8)
-		SCK		|	PB4 (D13)
-		SDI		|	PB2 (D11)
-		SDO		|	PB3 (D12)
+	RFM22 BOB	|	Arduino Pro|	Arduino Uno
+	-------------------------------------------
+		GND		|	GND        |	GND
+		3.3V	|	3.3V       |	3.3V
+		GPIO0	|	NC         |	NC
+		GPIO1	|	NC         |	NC
+		GPIO2	|	NC         |	NC
+		RXANT	|	PD6 (D6)   |	PD6 (D6)
+		TXANT	|	PD5 (D5)   |	PD1 (D1)
+		IRQ		|	PD4 (D4)   |	PD4 (D4)
+		CSN		|	PB0 (D8)   |	PB0 (D8)
+		SCK		|	PB4 (D13)  |	PB4 (D12)
+		SDI		|	PB2 (D11)  |	PB2 (D10)
+		SDO		|	PB3 (D12)  |	PB3 (D11)
 		
 	Antenna is a 17cm piece of wire sticking straight up into the air.
 */

@@ -62,7 +62,7 @@ MCU = atmega328p
 #         F_CPU = 16000000
 #         F_CPU = 18432000
 #         F_CPU = 20000000
-F_CPU = 8000000
+F_CPU = 16000000
 
 
 # Output format. (can be srec, ihex, binary)
@@ -277,11 +277,11 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 # to get a full listing.
 #
 #AVRDUDE_PROGRAMMER = stk200
-AVRDUDE_PROGRAMMER = ponyser
+AVRDUDE_PROGRAMMER = arduino
 
 # com1 = serial port. Use lpt1 to connect to parallel port.
 #AVRDUDE_PORT = lpt1
-AVRDUDE_PORT = com1
+AVRDUDE_PORT = com3
 # programmer connected to serial device
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
@@ -334,11 +334,11 @@ STK500_FLAGS += -I250kHz
 #---------------- Programming Options (avrdude serial bootloader) ----------------
 
 #"C:\arduino\hardware\tools\avr\bin\avrdude" -PCOM28 -c stk500v1 -patmega168 -b19200 -Uflash:w:Simon-PTH-v1.hex -V -F -C"C:\arduino\hardware\tools\avr\etc\avrdude.conf"
-SERIAL_AVRDUDE = "C:\Program Files\arduino-0018\arduino-0018\hardware\tools\avr\bin\avrdude"
-SERIAL_AVRDUDE_CONFIG = "C:\Program Files\arduino-0018\arduino-0018\hardware\tools\avr\etc\avrdude.conf"
-SERIAL_AVRDUDE_PORT = COM6
-SERIAL_AVRDUDE_SPEED = 57600
-SERIAL_AVRDUDE_PROGRAMMER = stk500v1
+SERIAL_AVRDUDE = "/cygdrive/c/WinAVR-20100110/bin/avrdude.exe"
+SERIAL_AVRDUDE_CONFIG = "/cygdrive/c/WinAVR-20100110/bin/avrdude.conf"
+SERIAL_AVRDUDE_PORT = COM3
+SERIAL_AVRDUDE_SPEED = 9600
+SERIAL_AVRDUDE_PROGRAMMER = arduino
 
 SERIAL_AVRDUDE_FLAGS = -p $(MCU) -P $(SERIAL_AVRDUDE_PORT) -c $(SERIAL_AVRDUDE_PROGRAMMER) -b $(SERIAL_AVRDUDE_SPEED)
 SERIAL_AVRDUDE_FLAGS += -C$(SERIAL_AVRDUDE_CONFIG)

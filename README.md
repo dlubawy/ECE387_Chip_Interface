@@ -5,7 +5,6 @@
 
 
 
-<<<<<<< HEAD
 =======
 SparkFun RF Transceiver Breakout - RFM22B-S2 (434 MHz)
 =======================================================

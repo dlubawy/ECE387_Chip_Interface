@@ -6,10 +6,8 @@
 
 
 ## SparkFun README
-=======
 SparkFun RF Transceiver Breakout - RFM22B-S2 (434 MHz)
-=======================================================
-
+------------------------------------------------------
 ![SparkFun RF Transceiver Breakout - RFM22B-S2 (434 MHz)](https://cdn.sparkfun.com//assets/parts/4/4/4/0/10154-01b.jpg)
 
 [*SparkFun RF Transceiver Breakout - RFM22B-S2 (434 MHz) (WRL-10154)*](https://www.sparkfun.com/products/10154)

@@ -360,9 +360,9 @@ void init_SPI(void)
 void ioinit (void)
 {
     //1 = output, 0 = input
-    DDRB = 0b11101111; //MISO input
-    DDRC = 0b11111111; //All outputs
-    DDRD = 0b11101110; //PORTD (RX on PD0), PD4 input
+    DDRB = 0b11010101; //MISO input
+    DDRC = 0b00000000; //All outputs
+    DDRD = 0b01100000; //PORTD (RX on PD0), PD4 input
 	int MYUBRR = 103;
 	UBRR0H = (MYUBRR) >> 8;
 	UBRR0L = MYUBRR;

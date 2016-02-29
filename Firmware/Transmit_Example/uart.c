@@ -55,3 +55,13 @@ int uart_println(const char *format, ...)
     va_end(args);
     return 0;
 }
+
+int uart_printf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    //fputs("\r\n", stdout);
+    va_end(args);
+    return 0;
+}

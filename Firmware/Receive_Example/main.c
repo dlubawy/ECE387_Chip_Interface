@@ -3,7 +3,7 @@
 	Under project: RFM22
 	Author: Jim Lindblom
 	RFM22 Receive Example
-	
+
 	Hardware: Arduino Pro (ATmega328) running at 8Mhz, 3.3V
 	Wiring:
 	RFM22 BOB	|	Arduino Pro
@@ -20,7 +20,7 @@
 		SCK		|	PB4 (D13)
 		SDI		|	PB2 (D11)
 		SDO		|	PB3 (D12)
-		
+
 	Antenna is a 17cm piece of wire sticking straight up into the air.
 */
 
@@ -83,18 +83,19 @@ int main(void)
 	ioinit();
 	init_SPI();
 	sbi(PORTB,CS);
+	uart_init( 9600 );
 	printf("********RFM22 Communication Test********\n");
 
 	//====================//
 	//Communications Test
 	printf("Reading DTYPE register, should be 0x08: %d", read(DTYPE));
-	
+
 	printf("\n*****************************************\n\n");
-	
+
 	init_RFM22();	// Initialize all RFM22 registers
 	printf("Entering RX Mode...\n");
 	to_rx_mode();
-	
+
 	while(1)
 	{
 		if((PIND & (1<<NIRQ)) == 0)	//Interrupt will be generated if data is recieved
@@ -104,12 +105,12 @@ int main(void)
 			{
 				RF_RXBUF[i] = read(0x7F);
 			}
-			
+
 			// Check that the checksum matches up:
 			chksum = 0;
 			for(i=0; i<16; i++)
 				chksum += RF_RXBUF[i];
-		
+
 			// If checksum is good, print out what was received into the terminal
 			if(chksum == RF_RXBUF[16])
 			{
@@ -138,44 +139,44 @@ void init_RFM22(void)
 	write(OMFC1, 0x01);		// Set READY mode
 	write(0x09, 0x7F);		// Cap = 12.5pF
 	write(0x0A, 0x05);		// Clk output is 2MHz
-	
+
 	write(0x0B, 0xF4);		// GPIO0 is for RX data output
 	write(0x0C, 0xEF);		// GPIO1 is TX/RX data CLK output
 	write(0x0D, 0x00);		// GPIO2 for MCLK output
 	write(0x0E, 0x00);		// GPIO port use default value
-	
+
 	write(0x0F, 0x70);		// NO ADC used
 	write(0x10, 0x00);		// no ADC used
 	write(0x12, 0x00);		// No temp sensor used
 	write(0x13, 0x00);		// no temp sensor used
-	
+
 	write(0x70, 0x20);		// No manchester code, no data whiting, data rate < 30Kbps
-	
+
 	write(0x1C, 0x1D);		// IF filter bandwidth
 	write(0x1D, 0x40);		// AFC Loop
 	//write(0x1E, 0x0A);	// AFC timing
-	
+
 	write(0x20, 0xA1);		// clock recovery
 	write(0x21, 0x20);		// clock recovery
 	write(0x22, 0x4E);		// clock recovery
 	write(0x23, 0xA5);		// clock recovery
 	write(0x24, 0x00);		// clock recovery timing
 	write(0x25, 0x0A);		// clock recovery timing
-	
+
 	//write(0x2A, 0x18);
 	write(0x2C, 0x00);
 	write(0x2D, 0x00);
 	write(0x2E, 0x00);
-	
+
 	write(0x6E, 0x27);		// TX data rate 1
 	write(0x6F, 0x52);		// TX data rate 0
-	
+
 	write(0x30, 0x8C);		// Data access control
-	
+
 	write(0x32, 0xFF);		// Header control
-	
+
 	write(0x33, 0x42);		// Header 3, 2, 1, 0 used for head length, fixed packet length, synchronize word length 3, 2,
-	
+
 	write(0x34, 64);		// 64 nibble = 32 byte preamble
 	write(0x35, 0x20);		// 0x35 need to detect 20bit preamble
 	write(0x36, 0x2D);		// synchronize word
@@ -187,7 +188,7 @@ void init_RFM22(void)
 	write(0x3C, 'n');		// set tx header 1
 	write(0x3D, 'g');		// set tx header 0
 	write(0x3E, 17);		// set packet length to 17 bytes
-	
+
 	write(0x3F, 's');		// set rx header
 	write(0x40, 'o');
 	write(0x41, 'n');
@@ -196,29 +197,29 @@ void init_RFM22(void)
 	write(0x44, 0xFF);		// Check all bits
 	write(0x45, 0xFF);		// check all bits
 	write(0x46, 0xFF);		// Check all bits
-	
+
 	write(0x56, 0x01);
-	
+
 	write(0x6D, 0x07);		// Tx power to max
-	
+
 	write(0x79, 0x00);		// no frequency hopping
 	write(0x7A, 0x00);		// no frequency hopping
-	
+
 	write(0x71, 0x22);		// GFSK, fd[8]=0, no invert for TX/RX data, FIFO mode, txclk-->gpio
-	
+
 	write(0x72, 0x48);		// Frequency deviation setting to 45K=72*625
-	
+
 	write(0x73, 0x00);		// No frequency offset
 	write(0x74, 0x00);		// No frequency offset
-	
+
 	write(0x75, 0x53);		// frequency set to 434MHz
 	write(0x76, 0x64);		// frequency set to 434MHz
 	write(0x77, 0x00);		// frequency set to 434Mhz
-	
+
 	write(0x5A, 0x7F);
 	write(0x59, 0x40);
 	write(0x58, 0x80);
-	
+
 	write(0x6A, 0x0B);
 	write(0x68, 0x04);
 	write(0x1F, 0x03);
@@ -227,7 +228,7 @@ void init_RFM22(void)
 void to_rx_mode(void)
 {
 	write(0x07, 0x01);	// to ready mode
-	
+
 	sbi(PORTD, RXANT);
 	cbi(PORTD, TXANT);
 	delay_ms(50);
@@ -237,19 +238,19 @@ void to_rx_mode(void)
 void rx_reset(void)
 {
 	unsigned char i;
-	
+
 	write(0x07, 0x01);	// to ready mode
-	
+
 	i = read(0x03);
 	i = read(0x04);
-	
+
 	write(0x7E, 17);
-	
+
 	write(0x08, 0x03);
 	write(0x08, 0x00);
-	
+
 	write(0x07, 5);
-	
+
 	write(0x05, 2);
 }
 
@@ -265,7 +266,7 @@ void write(uint8_t address, char data)
 {
 	//write any data byte to any single address
 	//adds a 0 to the MSB of the address byte (WRITE mode)
-	
+
 	address |= 0x80;
 
 	cbi(PORTB,CS);
@@ -350,7 +351,7 @@ void ioinit (void)
 	UCSR0A = (1<<U2X0);
 
 	TCCR2B = (1<<CS21);
-	
+
 	cbi(PORTD, TXANT);
 	cbi(PORTD, RXANT);
 }

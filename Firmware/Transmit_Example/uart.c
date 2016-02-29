@@ -46,29 +46,12 @@ void uart_init( uint32_t baud )
     stderr = &g_uart_stream;
 }
 
-int uart_print(const char *format, ...)
+int uart_println(const char *format, ...)
 {
     va_list args;
-    va_start (args, format);
-    vprintf (format, args);
-    fputs("\n\0", stdout);
-    va_end (args);
-    fflush(stdout);
-    //fputs(format, stdout);
-    //fflush(stdout);
-    return 0;
-}
-
-int uart_receiveln(char *buff, size_t sz)
-{
-    fgets(buff, sz, stdin);
-    return 0;
-}
-
-int uart_receivec(char line[], int i)
-{
-    int c;
-    c = getchar();
-    line[i] = (char)c;
+    va_start(args, format);
+    vprintf(format, args);
+    fputs("\r\n", stdout);
+    va_end(args);
     return 0;
 }

@@ -15,11 +15,11 @@
         GPIO2   |   NC         |    NC
         RXANT   |   PD6 (D6)   |    PD6 (D6)
         TXANT   |   PD5 (D5)   |    PD5 (D5)
-        IRQ     |   PD4 (D4)   |    PD4 (D4)
-        CSN     |   PB0 (D8)   |    PB0 (D8)
-        SCK     |   PB4 (D13)  |    PB4 (D12)
-        SDI     |   PB2 (D11)  |    PB2 (D10)
-        SDO     |   PB3 (D12)  |    PB3 (D11)
+        IRQ     |   PD4 (D4)   |    PD4 (D4)  
+        CSN     |   PB0 (D8)   |    PB2 (D10) SS
+        SCK     |   PB4 (D13)  |    PB5 (D13) SCK
+        SDI     |   PB2 (D11)  |    PB3 (D11) MOSI
+        SDO     |   PB3 (D12)  |    PB4 (D12) MISO
 
     Antenna is a 17cm piece of wire sticking straight up into the air.
 */
@@ -41,8 +41,8 @@
 #define LED 5
 
 //RFM22 Defines
-#define CS 0 //pin for chip select
-#define NIRQ 4
+#define CS 2 //pin for chip select
+#define NIRQ 4 // PD4
 #define TXANT 5 // PD5
 #define RXANT 6 // PD6
 
@@ -360,9 +360,8 @@ void init_SPI(void)
 void ioinit (void)
 {
     //1 = output, 0 = input
-    DDRB = 0b11010101; //MISO input
-    DDRC = 0b00000000; //All outputs
-    DDRD = 0b01100000; //PORTD (RX on PD0), PD4 input
+    DDRB = _BV(5)|_BV(4)|_BV(3)|_BV(2); //MISO input
+    DDRD = _BV(5)|_BV(6); //PORTD (RX on PD6 TX on PD5), PD4 input
     int MYUBRR = 103;
     UBRR0H = (MYUBRR) >> 8;
     UBRR0L = MYUBRR;

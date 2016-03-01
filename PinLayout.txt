@@ -1,0 +1,7 @@
+RX white 10 - D6
+TX green 11 - D5
+IRQ blue 12 - D4
+CSN yellow 13 - D10
+SCK white 14 - D13
+SDI green 15 - D11
+SDO blue 16 - D12

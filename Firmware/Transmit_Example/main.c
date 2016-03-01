@@ -226,9 +226,9 @@ void init_RFM22(void)
     write(0x73, 0x00);      // No frequency offset
     write(0x74, 0x00);      // No frequency offset
 
-    write(0x75, 0x53);      // frequency set to 434MHz
-    write(0x76, 0x64);      // frequency set to 434MHz
-    write(0x77, 0x00);      // frequency set to 434Mhz
+    write(0x75, 0x15);      // frequency set to 434MHz
+    write(0x76, 0xBB);      // frequency set to 434MHz
+    write(0x77, 0x80);      // frequency set to 434Mhz
 
     write(0x5A, 0x7F);
     write(0x59, 0x40);

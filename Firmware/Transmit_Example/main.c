@@ -74,6 +74,8 @@ int main(void)
 {
     char temp;
     unsigned char i;
+    //For temperature sensor
+    //int temperature;
     
     ioinit();
     init_SPI();
@@ -95,6 +97,15 @@ int main(void)
 
     init_RFM22();   // Initialize all RFM22 registers
     to_tx_mode();   // Send test packet '0123456789:;<=>?"
+
+    /*//Temperature Sensor
+    while(1)
+    {
+        write(0x0F, 0x80);
+        temperature = (read(0x11)-40);
+        uart_println("Temp: %i", temperature);
+        delay_ms(1000);
+    }*/
 
     /*// This exampes sends '0123456789:;<=>?' once a second
     while(1)
@@ -159,8 +170,10 @@ void init_RFM22(void)
     write(0x0D, 0x00);      // GPIO2 for MCLK output
     write(0x0E, 0x00);      // GPIO port use default value
 
+    //write(0x0F, 0x00);      // ADC used for temperature sensor
     write(0x0F, 0x70);      // NO ADC used
     write(0x10, 0x00);      // no ADC used
+    //write(0x12, 0xE0);      // Temp sensor used
     write(0x12, 0x00);      // No temp sensor used
     write(0x13, 0x00);      // no temp sensor used
 

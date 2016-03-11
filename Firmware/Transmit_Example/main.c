@@ -75,7 +75,7 @@ int main(void)
     char temp;
     unsigned char i;
     //For temperature sensor
-    //int temperature;
+    int temperature;
     
     ioinit();
     init_SPI();
@@ -107,16 +107,19 @@ int main(void)
         delay_ms(1000);
     }*/
 
-    /*// This exampes sends '0123456789:;<=>?' once a second
+    // This exampes sends '0123456789:;<=>?' once a second
     while(1)
     {
+        write(0x0F, 0x80);
+        temperature = (read(0x11)-40);
+        uart_println("Transmitting temperature: %i%cF", temperature,0xF8);
         to_tx_mode();
         uart_println("Transmit Done");
         delay_ms(1000);
     }
-    */
+    
 
-    // This example allows you to enter a 16-byte packet to send
+    /*// This example allows you to enter a 16-byte packet to send
     uart_println("Entering TX Mode...Give me a 16-byte packet");
     while(1)
     {
@@ -127,7 +130,7 @@ int main(void)
             uart_printf("%c", tx_buf[i]);
         to_tx_mode();
         uart_println("\r\nTransmit done...Press any key to transmit again");
-    }
+    }*/
 
     /*
     // This example sends a 'beep' to the terminal every second
@@ -170,11 +173,11 @@ void init_RFM22(void)
     write(0x0D, 0x00);      // GPIO2 for MCLK output
     write(0x0E, 0x00);      // GPIO port use default value
 
-    //write(0x0F, 0x00);      // ADC used for temperature sensor
-    write(0x0F, 0x70);      // NO ADC used
+    write(0x0F, 0x00);      // ADC used for temperature sensor
+    //write(0x0F, 0x70);      // NO ADC used
     write(0x10, 0x00);      // no ADC used
-    //write(0x12, 0xE0);      // Temp sensor used
-    write(0x12, 0x00);      // No temp sensor used
+    write(0x12, 0xE0);      // Temp sensor used
+    //write(0x12, 0x00);      // No temp sensor used
     write(0x13, 0x00);      // no temp sensor used
 
     write(0x70, 0x20);      // No manchester code, no data whiting, data rate < 30Kbps
@@ -239,7 +242,7 @@ void init_RFM22(void)
     write(0x73, 0x00);      // No frequency offset
     write(0x74, 0x00);      // No frequency offset
 
-    write(0x75, 0x15);      // frequency set to 915MHz
+    write(0x75, 0x35);      // frequency set to 915MHz
     write(0x76, 0xBB);      // frequency set to 915MHz
     write(0x77, 0x80);      // frequency set to 915Mhz
 
